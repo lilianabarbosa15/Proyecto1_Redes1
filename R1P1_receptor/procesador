@@ -8,13 +8,13 @@ import time
 
 #creacion del objeto principal para la captura de audio
 class AudioStream(object):
-    def _init_(self):
+    def __init__(self):
         
 #constantes para capturar el audio 
         self.CHUNK = 1024 * 2
         self.FORMAT = pyaudio.paInt16
         self.CHANNELS = 1
-        self.RATE = 4800# Fs
+        self.RATE = 4800 #Fs
         self.pause = False
 
 #creando el objeto que permite capturar el audio
@@ -30,23 +30,24 @@ class AudioStream(object):
         self.init_plots()
         self.start_plot()
         
-    def init_plot(self):
+#Creando los graficos
+    def init_plots(self):
         
-#variables para gráficar x para tiempo Xs para frecuencia
+        #variables para gráficar x para tiempo Xs para frecuencia
         x = np.arange(0, 2*self.CHUNK, 2)
         xf = np.linspace(0, self.RATE, self.CHUNK)
 
-#creando la figura con las 2 gráficas dentro
+        #creando la figura con las 2 gráficas dentro
         self.fig, (ax1, ax2) = plt.subplots(2, figsize = (15, 7))
-        self.fig.canvas.mp1_connect('button_press_event', self.onClick)
+        self.fig.canvas.mpl_connect('button_press_event', self.onClick)
 
-#graficando datos aleatorios en la gráfica de audio mientras no se reciba nada
+        #graficando datos aleatorios en la gráfica de audio mientras no se reciba nada
         self.line, = ax1.plot(x, np.random.rand(self.CHUNK), '-', lw = 2)
 
-#graficando datos aleatorios en la gráfica de frecuencia mientras no se recibe nada 
+        #graficando datos aleatorios en la gráfica de frecuencia mientras no se recibe nada 
         self.line_fft, = ax2.plot(xf, np.random.rand(self.CHUNK), '-', lw = 2)
 
-# definiendo los límites de la gráfica de audio en el dominio del tiempo
+        # definiendo los límites de la gráfica de audio en el dominio del tiempo
         ax1.set_title('señal de audio (dominio del tiempo)')
         ax1.set_ylabel('volumen')
         ax1.set_ylim(-10000, 10000)
@@ -54,7 +55,8 @@ class AudioStream(object):
         plt.setp(
             ax1, yticks = [0],
             xticks = [0, self.CHUNK, 2 * self.CHUNK],)
-# Definiendo los limites de la gráfica de audio en el dominio de la frecuencia
+        
+        # Definiendo los limites de la gráfica de audio en el dominio de la frecuencia
         ax2.set_title('señal de audio en el dominio de la frecuencia')
         ax2.set_xlabel('frecuencia')
         ax2.set_ylabel('amplitud')
@@ -63,14 +65,15 @@ class AudioStream(object):
         plt.setp(
             ax2, yticks = [0, 5, 10, 15, 20],
                  xticks = [0, 100, 200, 300, 1000, 3000, 4000],)
-# mostrando ventana y definiendo sus dimensiones
+
+        # mostrando ventana y definiendo sus dimensiones
         mngr = plt.get_current_fig_manager()
-        mngr.window.setGeomtry = (5, 120, 1910, 1070)
+        mngr.window.setGeometry = (5, 120, 1910, 1070)
         plt.show(block=False)
         
         
         
-#actulizar las graficas en tiempo real
+#Actulizar las graficas en tiempo real
     def start_plot(self):
         
         print('stream started')
@@ -106,14 +109,13 @@ class AudioStream(object):
             #Esta valiriable contiene el pico mas grande
             max_loc = np.argmax(fft_data[low_freq_loc:]) + low_freq_loc
 
+            #prueba find peaks
+            #thresh=0.5
+            #peak_idx, _=find_peaks(fft_data,height=thresh)
 
-#prueba find peaks
-#thresh=0.5
-#peak_idx, _=find_peaks(fft_data,height=thresh)
+            #print(f_vec[max_loc])
 
-#print(f_vec[max_loc])
-
-#deteccion de la nota musical en un minimo de rengo de frecuencia
+            #deteccion de la nota musical en un minimo de rengo de frecuencia
             if 980 <= f_vec[max_loc] <= 990:
                 print("B5 Si")
             if 865 <= f_vec[max_loc] <= 895:
@@ -174,6 +176,5 @@ class AudioStream(object):
     def onClick(self, event):
         self.pause = True
     
-if name == '__main__': ##  AQUI aqui hay un error que debemos corregir
+if __name__ == '__main__':
     AudioStream()
-    
