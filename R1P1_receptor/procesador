@@ -101,63 +101,25 @@ class AudioStream(object):
                 np.abs(yf[0:self.CHUNK]) / (128 * self.CHUNK))
                         
             #Identificacion del pico de la frecuencia mas grande de todo el vector de la FFT
-            f_vec = self.RATE * np.arange(self.CHUNK / 2) / self.CHUNK #Vector de frecuencia
-            mic_low_freq = 40 #sensibilidad minima del microfono
-            low_freq_loc = np.argmin(np.abs(f_vec - mic_low_freq))
-            fft_data = (np.abs(np.fft.fft(data_int))[0:int(np.floor(self.CHUNK / 2))])/self.CHUNK
+            f_vec1 = self.RATE * np.arange(self.CHUNK / 2) / self.CHUNK #Vector de frecuencia
+            mic_low_freq1 = 40 #sensibilidad minima del microfono
+            low_freq_loc1 = np.argmin(np.abs(f_vec1 - mic_low_freq1))
+            fft_data1 = (np.abs(np.fft.fft(data_int))[0:int(np.floor(self.CHUNK / 2))])/self.CHUNK
 
             #Esta valiriable contiene el pico mas grande
-            max_loc = np.argmax(fft_data[low_freq_loc:]) + low_freq_loc
+            max_loc1 = np.argmax(fft_data1[low_freq_loc1:]) + low_freq_loc1
 
-            #prueba find peaks
-            #thresh=0.5
-            #peak_idx, _=find_peaks(fft_data,height=thresh)
+            print(f_vec1[max_loc1])
 
-            #print(f_vec[max_loc])
-
-            #deteccion de la nota musical en un minimo de rengo de frecuencia
-            if 980 <= f_vec[max_loc] <= 990:
-                print("B5 Si")
-            if 865 <= f_vec[max_loc] <= 895:
-                print("A5 La")
-            if 775 <= f_vec[max_loc] <= 800:
-                print("G5 Sol")
-            if 690 <= f_vec[max_loc] <= 710:
-                print("F5 Fa")
-            if 650 <= f_vec[max_loc] <= 670:
-                print("E5 Mi")
-            if 585 <= f_vec[max_loc] <= 595:
-                print("D5 Re")
-            if 515 <= f_vec[max_loc] <= 550:
-                print("C5 Do")
-            if 490 <= f_vec[max_loc] <= 500:
-                print("B4 Si")
-            if 437 <= f_vec[max_loc] <= 447:
-                print("A5 La")
-            if 390 <= f_vec[max_loc] <= 400:
-                print("G4 Sol")
-            if 345 <= f_vec[max_loc] <= 355:
-                print("F4 Fa")
-            if 325 <= f_vec[max_loc] <= 335:
-                print("E4 Mi")
-            if 290 <= f_vec[max_loc] <= 300:
-                print("D4 Re")
-            if 255 <= f_vec[max_loc] <= 280:
-                print("C4 Do")
-            if 243 <= f_vec[max_loc] <= 253:
-                print("B3 Si")
-            if 215 <= f_vec[max_loc] <= 225:
-                print("A3 La")
-            if 192 <= f_vec[max_loc] <= 202:
-                print("G3 Sol")
-            if 172 <= f_vec[max_loc] <= 177:
-                print("F3 Fa")
-            if 162 <= f_vec[max_loc] <= 167:
-                print("E3 Mi")
-            if 144 <= f_vec[max_loc] <= 150:
-                print("D3 Re")
-            if 127 <= f_vec[max_loc] <= 133:
-                print("C3 Do")
+            #deteccion de la nota musical en un minimo de rango de frecuencia
+            if 1640 <= f_vec1[max_loc1] <= 1660:
+                print("2000hz: ", f_vec1[max_loc1])
+            if 880 <= f_vec1[max_loc1] <= 900:
+                print("600hz: ", f_vec1[max_loc1])
+            if 750 <= f_vec1[max_loc1] <= 770:
+                print("765hz: ", f_vec1[max_loc1])
+            if 250 <= f_vec1[max_loc1] <= 280:
+                print("269hz: ", f_vec1[max_loc1])
 
             self.fig.canvas.draw()
             self.fig.canvas.flush_events()
